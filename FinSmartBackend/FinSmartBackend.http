@@ -1,0 +1,6 @@
+@FinSmartBackend_HostAddress = http://localhost:5002
+
+GET {{FinSmartBackend_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
