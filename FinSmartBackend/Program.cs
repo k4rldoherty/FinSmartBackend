@@ -11,7 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add MVC controllers
 builder.Services.AddControllers();
-
+builder.Services.AddTransient<SeedData>();
 // Add Swagger/OpenAPI services
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
@@ -38,6 +38,18 @@ builder.Services.AddIdentityApiEndpoints<IdentityUser>()
 
 // Build the application
 var app = builder.Build();
+
+if (args.Length == 1 && args[0].ToLower() == "seeddata") SeedData(app);
+
+void SeedData(IHost app)
+{
+    var scopedFactory = app.Services.GetService<IServiceScopeFactory>();
+    using (var scope = scopedFactory.CreateScope())
+    {
+        var service = scope.ServiceProvider.GetService<SeedData>();
+        service.Initialize(scope.ServiceProvider);
+    }
+}
 
 // Configure the HTTP request pipeline.
 
